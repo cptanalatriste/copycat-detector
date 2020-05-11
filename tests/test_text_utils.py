@@ -2,7 +2,7 @@ from unittest import TestCase
 from copycat_detector import create_two_gram_vocabulary
 
 
-class Test(TestCase):
+class TestTextUtils(TestCase):
     def test_create_two_gram_vocabulary(self):
         raw_documents = ["This is an answer text", "This is a source text"]
 
