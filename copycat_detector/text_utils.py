@@ -1,4 +1,5 @@
 from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
 
 
 def create_two_gram_vocabulary(raw_documents):
@@ -28,4 +29,28 @@ def calculate_containment_value(ngram_array, answer_index=0, source_index=1):
 
 
 def get_longest_common_subsequence(answer_text, source_text, normalized=True):
-    return 0.0
+    answer_word_list = answer_text.split()
+    source_word_list = source_text.split()
+
+    rows = len(answer_word_list) + 1
+    columns = len(source_word_list) + 1
+
+    lcs_matrix = np.zeros(shape=(rows, columns))
+
+    for row_index in range(1, rows):
+        row_word = answer_word_list[row_index - 1]
+        for column_index in range(1, columns):
+            column_word = source_word_list[column_index - 1]
+
+            if row_word == column_word:
+                top_left_value = lcs_matrix[row_index - 1, column_index - 1]
+                lcs_matrix[row_index, column_index] = top_left_value + 1
+            else:
+                left_value = lcs_matrix[row_index, column_index - 1]
+                top_value = lcs_matrix[row_index - 1, column_index]
+                lcs_matrix[row_index, column_index] = max(left_value, top_value)
+
+    result = lcs_matrix[-1, -1]
+    if normalized:
+        result = result / len(answer_word_list)
+    return result

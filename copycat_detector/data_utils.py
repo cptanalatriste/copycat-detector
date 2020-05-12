@@ -3,6 +3,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from copycat_detector import calculate_containment_value
 
 CATEGORY_COLUMN = 'Category'
+TASK_COLUMN = 'Task'
+DATATYPE_COLUMN = 'Datatype'
+CLASS_COLUMN = 'Class'
 
 
 def pre_process_data_file(csv_file):
@@ -31,11 +34,27 @@ def calculate_containment_from_df(plagiarism_df, ngram_size, target_file):
 
 def get_answer_and_source(plagiarism_df, target_file):
     answer_index = plagiarism_df.index[plagiarism_df['File'] == target_file]
-    answer_task = plagiarism_df.at[answer_index[0], 'Task']
+    answer_task = plagiarism_df.at[answer_index[0], TASK_COLUMN]
 
-    source_index = plagiarism_df.index[(plagiarism_df['Task'] == answer_task) & (plagiarism_df['Class'] == -1)]
+    source_index = plagiarism_df.index[
+        (plagiarism_df[TASK_COLUMN] == answer_task) & (plagiarism_df[CLASS_COLUMN] == -1)]
 
     return answer_index[0].item(), source_index[0].item()
+
+
+def generate_train_test_data(original_dataframe, features_dataframe, selected_features):
+    merged_dataframe = pd.concat([original_dataframe, features_dataframe], axis=1)
+
+    train_dataframe = merged_dataframe.loc[merged_dataframe[DATATYPE_COLUMN] == 'train']
+    test_dataframe = merged_dataframe.loc[merged_dataframe[DATATYPE_COLUMN] == 'test']
+
+    train_x = train_dataframe.loc[:, selected_features].to_numpy()
+    test_x = test_dataframe.loc[:, selected_features].to_numpy()
+
+    train_y = train_dataframe[CLASS_COLUMN].to_numpy()
+    test_y = test_dataframe[CLASS_COLUMN].to_numpy()
+
+    return train_x, train_y, test_x, test_y
 
 
 def get_class_from_category(category):

@@ -52,4 +52,4 @@ class TestTextUtils(TestCase):
 
         normalized_lcs = get_longest_common_subsequence(answer_text=answer_text, source_text=source_text,
                                                         normalized=True)
-        self.assertAlmostEqual(0.7408, normalized_lcs)
+        self.assertAlmostEqual(0.7408, normalized_lcs, places=3)
