@@ -20,11 +20,11 @@ def pre_process_data_file(csv_file):
     return plagiarism_df
 
 
-def calculate_containment_value(plagiarism_df, ngram_size, target_file):
+def calculate_containment_from_df(plagiarism_df, ngram_size, target_file):
     count_vectorizer = CountVectorizer(analyzer='word', ngram_range=(ngram_size, ngram_size))
     ngram_array = count_vectorizer.fit_transform(raw_documents=plagiarism_df['Text']).toarray()
 
-    answer_index, source_index = get_answer_and_source(plagiarism_df=plagiarism_df, task_value=answer_task)
+    answer_index, source_index = get_answer_and_source(plagiarism_df=plagiarism_df, target_file=target_file)
 
     return calculate_containment_value(ngram_array=ngram_array, answer_index=answer_index, source_index=source_index)
 
@@ -33,9 +33,9 @@ def get_answer_and_source(plagiarism_df, target_file):
     answer_index = plagiarism_df.index[plagiarism_df['File'] == target_file]
     answer_task = plagiarism_df.at[answer_index[0], 'Task']
 
-    source_row = plagiarism_df[(plagiarism_df['Task'] == answer_task) & (plagiarism_df['Class'] == -1)]
+    source_index = plagiarism_df.index[(plagiarism_df['Task'] == answer_task) & (plagiarism_df['Class'] == -1)]
 
-    return answer_index[0], source_row.index[0]
+    return answer_index[0].item(), source_index[0].item()
 
 
 def get_class_from_category(category):

@@ -15,12 +15,15 @@ class TestDataUtils(TestCase):
         expected_classes = set([-1, 0, 1])
         self.assertEqual(expected_classes, set(plagiarism_df['Class'].unique()))
 
-    def test_get_original_for_task(self):
+    def test_get_answer_and_source(self):
         csv_file = '../data/file_information.csv'
 
         plagiarism_df = pre_process_data_file(csv_file=csv_file)
         target_file = 'g0pB_taske.txt'
         answer_index, source_index = get_answer_and_source(plagiarism_df, target_file=target_file)
+
+        self.assertEqual(int, type(answer_index))
+        self.assertEqual(int, type(source_index))
 
         expected_answer_index = 9
         self.assertEqual(expected_answer_index, answer_index)

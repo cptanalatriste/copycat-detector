@@ -15,10 +15,13 @@ def calculate_containment_value(ngram_array, answer_index=0, source_index=1):
     common_ngrams = 0.0
     answer_ngrams = 0.0
     for ngram_index in range(len(answer_representation)):
-        if answer_representation[ngram_index] == 1:
-            answer_ngrams += 1
+        answer_count = answer_representation[ngram_index]
+        source_count = source_representation[ngram_index]
 
-            if source_representation[ngram_index] == 1:
-                common_ngrams += 1
+        if answer_count > 0:
+            answer_ngrams += answer_count
+
+            if source_count > 0:
+                common_ngrams += min(answer_count, source_count)
 
     return common_ngrams / answer_ngrams
