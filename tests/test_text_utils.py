@@ -3,7 +3,7 @@ from unittest import TestCase
 from sklearn.feature_extraction.text import CountVectorizer
 
 from copycat_detector import create_two_gram_vocabulary, pre_process_data_file, get_answer_and_source, \
-    calculate_containment_value
+    calculate_containment_value, get_longest_common_subsequence
 from helpers import process_file
 
 
@@ -40,3 +40,16 @@ class TestTextUtils(TestCase):
 
         containment_value = calculate_containment_value(ngram_array)
         self.assertAlmostEqual(1.0, containment_value)
+
+    def test_get_longest_common_subsequence(self):
+        answer_text = "i think pagerank is a link analysis algorithm used by google that uses a system of weights attached " \
+                      "to each element of a hyperlinked set of documents"
+        source_text = "pagerank is a link analysis algorithm used by the google internet search engine that assigns a numerical " \
+                      "weighting to each element of a hyperlinked set of documents"
+
+        raw_lcs = get_longest_common_subsequence(answer_text=answer_text, source_text=source_text, normalized=False)
+        self.assertAlmostEqual(20, raw_lcs)
+
+        normalized_lcs = get_longest_common_subsequence(answer_text=answer_text, source_text=source_text,
+                                                        normalized=True)
+        self.assertAlmostEqual(0.7408, normalized_lcs)

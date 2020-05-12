@@ -25,3 +25,7 @@ def calculate_containment_value(ngram_array, answer_index=0, source_index=1):
                 common_ngrams += min(answer_count, source_count)
 
     return common_ngrams / answer_ngrams
+
+
+def get_longest_common_subsequence(answer_text, source_text, normalized=True):
+    return 0.0
