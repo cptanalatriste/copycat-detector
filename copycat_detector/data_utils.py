@@ -57,6 +57,15 @@ def generate_train_test_data(original_dataframe, features_dataframe, selected_fe
     return train_x, train_y, test_x, test_y
 
 
+def generate_file_for_sagemaker(features, labels, output_file, output_directory):
+    label_dataframe = pd.DataFrame(data=labels)
+    features_dataframe = pd.DataFrame(data=features)
+
+    merged_dataframe = pd.concat([label_dataframe, features_dataframe], axis=1)
+    merged_dataframe = merged_dataframe.dropna()
+    merged_dataframe.to_csv(output_directory + "/" + output_file, index=False, header=False)
+
+
 def get_class_from_category(category):
     if category == 'non':
         return 0
