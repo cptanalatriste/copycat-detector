@@ -1,6 +1,6 @@
 # copycat-detector
 
-![love_island_new_roster](https://github.com/cptanalatriste/celebrity-generator/blob/master/img/new_roster.png?raw=true)
+![love_island_new_roster](https://github.com/cptanalatriste/copycat-detector/blob/master/notebook_ims/plag_example.png?raw=true)
 
 A Naive-Bayes classifier for detecting plagiarism, trained over a dataset of short answers [developed by Clough and Stevenson](https://link.springer.com/article/10.1007/s10579-009-9112-1).
 
